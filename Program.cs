@@ -1,3 +1,6 @@
+using ContosoPizzaWeb.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,7 +10,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<PromotionsContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("PromotionsContext")));
+builder.Services.AddDbContext<PizzaContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("PizzaContext")));
+
 var app = builder.Build();
+
+
+app.CreateDbIfNotExists();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
